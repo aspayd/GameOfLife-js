@@ -17,7 +17,7 @@ function setup(){
             for(var row = 0; row < width; row++){
                 if(row % cellWidth == 0){
                     random = Math.floor(Math.random() * 2);
-                    cells.push({x: row, y: col, alive: random});
+                    cells.push({x: row, y: col, alive: random, neighbors: 0});
                 }
             }
         }
@@ -31,7 +31,6 @@ function setup(){
 
 var neighbors = [];
 var countNeighbors = 0;
-var neighborObj = {neighbors: 0};
 
 // GOL logic here
 function tick(){
@@ -95,9 +94,6 @@ function tick(){
         }
 
         // add number of liveNeighbors to each cell
-        neighborObj.neighbors = countNeighbors;
-
-        Object.assign(cells[i], neighborObj);
 
         countNeighbors = 0;
         neighbors = [];
