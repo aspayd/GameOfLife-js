@@ -16,6 +16,7 @@ function setup(){
         if(col % cellHeight == 0){
             for(var row = 0; row < width; row++){
                 if(row % cellWidth == 0){
+                    // random 50% alive state seed
                     random = Math.floor(Math.random() * 2);
                     cells.push({x: row, y: col, alive: random, neighbors: 0});
                 }
@@ -94,6 +95,7 @@ function tick(){
         }
 
         // add number of liveNeighbors to each cell
+        cells[i].neighbors = countNeighbors;
 
         countNeighbors = 0;
         neighbors = [];
@@ -120,4 +122,7 @@ function render(){
 setup();
 
 // tick and render at 10 fps
-setInterval(tick, 1000/10);
+// tick every time the button is clicked if commented out 
+tick();
+// setInterval(tick, 1000/10);
+

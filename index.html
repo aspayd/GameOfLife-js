@@ -7,6 +7,10 @@
     </head>
     <body>
         <canvas></canvas>
+        <div>
+            <button onclick="tick()">Tick</button>
+            <button onclick="setInterval(tick, 1000/10);">Loop</button>
+        </div>
         <script src="./javascript/gameoflife.js"></script>
     </body>
 </html>
