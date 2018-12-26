@@ -11,7 +11,7 @@ var cells = [];
 
 function setup(){
     var random;
-    // Push a new cell object into the array for every cell column and row
+    // push a new cell object into the array for every cell column and row
     for(var col = 0; col < height; col++){
         if(col % cellHeight == 0){
             for(var row = 0; row < width; row++){
@@ -30,12 +30,12 @@ function setup(){
 }
 
 var neighbors = [];
-var liveNeighbors = 0;
+var countNeighbors = 0;
+var neighborObj = {neighbors: 0};
 
+// GOL logic here
 function tick(){
-    // GOL logic here
-
-    // Find the neighbors of each cell
+    // find the neighbors of each cell
     for(var i = 0; i < cells.length; i++){
         
         if(cells[i].x == 0 && cells[i].y != 0){
@@ -91,13 +91,15 @@ function tick(){
 
         // count live neighbors
         for(var j = 0; j < neighbors.length; j++){
-            liveNeighbors += neighbors.alive;
+            countNeighbors += neighbors.alive;
         }
 
-        // Add number of liveNeighbors to each cell
-        
+        // add number of liveNeighbors to each cell
+        neighborObj.neighbors = countNeighbors;
 
-        liveNeighbors = 0;
+        Object.assign(cells[i], neighborObj);
+
+        countNeighbors = 0;
         neighbors = [];
     }
 
@@ -121,4 +123,5 @@ function render(){
 
 setup();
 
+// tick and render at 10 fps
 setInterval(tick, 1000/10);
