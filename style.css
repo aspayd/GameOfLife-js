@@ -4,6 +4,10 @@ body{
     overflow: hidden;
 }
 
+canvas{
+    background-color: rgb(50, 50, 50);
+}
+
 div{
     padding-left: 300;
     justify-items: center;

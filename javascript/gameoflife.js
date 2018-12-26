@@ -31,7 +31,6 @@ function setup(){
 }
 
 var neighbors = [];
-var countNeighbors = 0;
 
 // GOL logic here
 function tick(){
@@ -51,7 +50,7 @@ function tick(){
             neighbors.push(cells[i + 100]);
             neighbors.push(cells[i + 101]);
         }else if(cells[i].x == (width/cellWidth) && cells[i].y != (height/cellHeight)){
-            neighbors.push(cells[cells[i].i - 51]);
+            neighbors.push(cells[i - 51]);
             neighbors.push(cells[i - 50]);
             neighbors.push(cells[i - 1]);
             neighbors.push(cells[i + 99]);
@@ -91,13 +90,10 @@ function tick(){
 
         // count live neighbors
         for(var j = 0; j < neighbors.length; j++){
-            countNeighbors += neighbors.alive;
+            // cells[i].neighbors += neighbors[j].alive;
         }
 
-        // add number of liveNeighbors to each cell
-        cells[i].neighbors = countNeighbors;
-
-        countNeighbors = 0;
+        // countNeighbors = 0;
         neighbors = [];
     }
 
@@ -123,6 +119,5 @@ setup();
 
 // tick and render at 10 fps
 // tick every time the button is clicked if commented out 
-tick();
 // setInterval(tick, 1000/10);
 
