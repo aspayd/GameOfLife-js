@@ -16,8 +16,9 @@ function setup(){
         if(col % cellHeight == 0){
             for(var row = 0; row < width; row++){
                 if(row % cellWidth == 0){
+                    // random 50% alive state seed
                     random = Math.floor(Math.random() * 2);
-                    cells.push({x: row, y: col, alive: random});
+                    cells.push({x: row, y: col, alive: random, neighbors: 0});
                 }
             }
         }
@@ -30,8 +31,6 @@ function setup(){
 }
 
 var neighbors = [];
-var countNeighbors = 0;
-var neighborObj = {neighbors: 0};
 
 // GOL logic here
 function tick(){
@@ -51,7 +50,7 @@ function tick(){
             neighbors.push(cells[i + 100]);
             neighbors.push(cells[i + 101]);
         }else if(cells[i].x == (width/cellWidth) && cells[i].y != (height/cellHeight)){
-            neighbors.push(cells[cells[i].i - 51]);
+            neighbors.push(cells[i - 51]);
             neighbors.push(cells[i - 50]);
             neighbors.push(cells[i - 1]);
             neighbors.push(cells[i + 99]);
@@ -91,15 +90,10 @@ function tick(){
 
         // count live neighbors
         for(var j = 0; j < neighbors.length; j++){
-            countNeighbors += neighbors.alive;
+            // cells[i].neighbors += neighbors[j].alive;
         }
 
-        // add number of liveNeighbors to each cell
-        neighborObj.neighbors = countNeighbors;
-
-        Object.assign(cells[i], neighborObj);
-
-        countNeighbors = 0;
+        // countNeighbors = 0;
         neighbors = [];
     }
 
@@ -124,4 +118,6 @@ function render(){
 setup();
 
 // tick and render at 10 fps
-setInterval(tick, 1000/10);
+// tick every time the button is clicked if commented out 
+// setInterval(tick, 1000/10);
+

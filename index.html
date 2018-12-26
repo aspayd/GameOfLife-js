@@ -2,10 +2,15 @@
 <html>
     <head>
         <title>Conway's Game of Life</title>
+        <link rel="icon" href="favicon.jpg" />
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <canvas></canvas>
+        <div>
+            <button onclick="tick()">Tick</button>
+            <button onclick="setInterval(tick, 1000/10);">Loop</button>
+        </div>
         <script src="./javascript/gameoflife.js"></script>
     </body>
 </html>
