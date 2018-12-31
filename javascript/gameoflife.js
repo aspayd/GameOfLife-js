@@ -2,10 +2,10 @@ var canvas = document.querySelector("canvas");
 var ctx = canvas.getContext('2d');
 ctx.fillStyle = 'rgb(255, 255, 255)';
 
-var width = 500;
-var height = 500;
-var cellWidth = 10;
-var cellHeight = 10;
+var width = 1350;
+var height = 570;
+var cellWidth = 5;
+var cellHeight = 5;
 
 var cols = height / cellHeight;
 var rows = width / cellWidth;
@@ -13,6 +13,7 @@ var rows = width / cellWidth;
 var cells = [];
 
 function setup(){
+
     // Create the empty 2d Array of Cells
     var random;
     for(var i = 0; i < rows; i++){
@@ -155,7 +156,7 @@ function render(){
     for(var i = 0; i < rows; i++){
         for(var j = 0; j < cols; j++){
             if(cells[i][j].alive == 1){
-                ctx.fillStyle = 'rgb(255, 255, 255)';
+                ctx.fillStyle = 'rgb(' + 255 + ',' + 255 + ',' + 255 + ')';
                 ctx.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
             }
         }
