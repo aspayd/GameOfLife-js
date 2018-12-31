@@ -15,12 +15,12 @@ var cells = [];
 function setup(){
     // Create the empty 2d Array of Cells
     var random;
-    for(var i = 0; i < cols; i++){
+    for(var i = 0; i < rows; i++){
         cells[i] = [];
-        for(var j = 0; j < rows; j++){
+        for(var j = 0; j < cols; j++){
             // random 50% alive state seed
             random = Math.floor(Math.random() * 2);
-            cells[i][j] = {x: i * 10, y: j * 10, alive: random, neighbors: null};
+            cells[i][j] = {x: i * cellWidth, y: j * cellHeight, alive: random, neighbors: null};
         }
     }
 
@@ -35,24 +35,24 @@ function setup(){
 // GOL logic here
 function tick(){
     // find the neighbors of each cell
-    for(var i = 0; i < cols; i++){
-        for(var j = 0; j < rows; j++){
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
             // if corner or edge only count cells in array range
-            if((i == 0) || (j == 0) || (i == cols - 1) || (j == rows - 1)){
+            if((i == 0) || (j == 0) || (i == rows - 1) || (j == cols - 1)){
                 // corners
                 if((i == 0) && (j == 0)){ // top left corner
                     cells[i][j].neighbors += cells[i+1][j].alive;
                     cells[i][j].neighbors += cells[i][j+1].alive;
                     cells[i][j].neighbors += cells[i+1][j+1].alive;
-                }else if((i == cols - 1) && (j == rows - 1)){ // bottom right corner
+                }else if((i == rows - 1) && (j == cols - 1)){ // bottom right corner
                     cells[i][j].neighbors += cells[i-1][j-1].alive;
                     cells[i][j].neighbors += cells[i][j-1].alive;
                     cells[i][j].neighbors += cells[i-1][j].alive;
-                }else if((i == 0) && (j == rows - 1)){ // bottom left corner
+                }else if((i == 0) && (j == cols - 1)){ // bottom left corner
                     cells[i][j].neighbors += cells[i][j-1].alive;
                     cells[i][j].neighbors += cells[i+1][j-1].alive;
                     cells[i][j].neighbors += cells[i+1][j].alive;
-                }else if((i == cols - 1) && (j == 0)){ // top right corner
+                }else if((i == rows - 1) && (j == 0)){ // top right corner
                     cells[i][j].neighbors += cells[i-1][j].alive;
                     cells[i][j].neighbors += cells[i-1][j+1].alive;
                     cells[i][j].neighbors += cells[i][j+1].alive;
@@ -70,20 +70,20 @@ function tick(){
                     cells[i][j].neighbors += cells[i][j+1].alive;
                     cells[i][j].neighbors += cells[i+1][j].alive;
                     cells[i][j].neighbors += cells[i+1][j+1].alive;
-                }else if((i == cols - 1) && (j != 0)){ // right edge
+                }else if((i == rows - 1) && (j != 0)){ // right edge
                     cells[i][j].neighbors += cells[i-1][j-1].alive;
                     cells[i][j].neighbors += cells[i-1][j].alive;
                     cells[i][j].neighbors += cells[i-1][j+1].alive;
                     cells[i][j].neighbors += cells[i][j-1].alive;
                     cells[i][j].neighbors += cells[i][j+1].alive;
-                }else if((i != 0) && (j == rows - 1)){ // bottom edge
+                }else if((i != 0) && (j == cols - 1)){ // bottom edge
                     cells[i][j].neighbors += cells[i-1][j-1].alive;
                     cells[i][j].neighbors += cells[i-1][j].alive;
                     cells[i][j].neighbors += cells[i][j-1].alive;
                     cells[i][j].neighbors += cells[i+1][j-1].alive;
                     cells[i][j].neighbors += cells[i+1][j].alive;
                 }
-
+                // center cells
             }else{
                 cells[i][j].neighbors += cells[i-1][j-1].alive;
                 cells[i][j].neighbors += cells[i][j-1].alive;
@@ -96,19 +96,6 @@ function tick(){
             }
         }
     }
-
-    // var x = 1;
-    // var y = 1;
-
-    // cells[x][y].neighbors += cells[x-1][y-1].alive;
-    // cells[x][y].neighbors += cells[x][y-1].alive;
-    // cells[x][y].neighbors += cells[x+1][y-1].alive;
-    // cells[x][y].neighbors += cells[x-1][y].alive;
-    // cells[x][y].neighbors += cells[x+1][y].alive;
-    // cells[x][y].neighbors += cells[x-1][y+1].alive;
-    // cells[x][y].neighbors += cells[x][y+1].alive;
-    // cells[x][y].neighbors += cells[x+1][y+1].alive;
-
     
     render();
 }
@@ -120,11 +107,11 @@ function render(){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // render cells
-    for(var i = 0; i < cols; i++){
-        for(var j = 0; j < rows; j++){
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
             if(cells[i][j].alive == 1){
                 ctx.fillStyle = 'rgb(255, 255, 255)';
-                ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+                ctx.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
             }
         }
     }
