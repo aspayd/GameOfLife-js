@@ -5,22 +5,22 @@ ctx.fillStyle = 'rgb(255, 255, 255)';
 var width = 500;
 var height = 500;
 var cellWidth = 10;
-var cellHeight = 10; 
+var cellHeight = 10;
+
+var cols = height / cellHeight;
+var rows = width / cellWidth;
 
 var cells = [];
 
 function setup(){
+    // Create the empty 2d Array of Cells
     var random;
-    // push a new cell object into the array for every cell column and row
-    for(var col = 0; col < height; col++){
-        if(col % cellHeight == 0){
-            for(var row = 0; row < width; row++){
-                if(row % cellWidth == 0){
-                    // random 50% alive state seed
-                    random = Math.floor(Math.random() * 2);
-                    cells.push({x: row, y: col, alive: random, neighbors: 0});
-                }
-            }
+    for(var i = 0; i < rows; i++){
+        cells[i] = [];
+        for(var j = 0; j < cols; j++){
+            // random 50% alive state seed
+            random = Math.floor(Math.random() * 2);
+            cells[i][j] = {x: i * cellWidth, y: j * cellHeight, alive: random, neighbors: null};
         }
     }
 
@@ -28,75 +28,75 @@ function setup(){
 
     canvas.width = width;
     canvas.height = height;
-}
 
-var neighbors = [];
+    tick();
+}
 
 // GOL logic here
 function tick(){
     // find the neighbors of each cell
-    for(var i = 0; i < cells.length; i++){
-        
-        if(cells[i].x == 0 && cells[i].y != 0){
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 49]);
-            neighbors.push(cells[i + 1]);
-            neighbors.push(cells[i + 100]);
-            neighbors.push(cells[i + 101]);
-        }else if(cells[i].y == 0 && cells[i].x != 0){
-            neighbors.push(cells[i - 1]);
-            neighbors.push(cells[i + 1]);
-            neighbors.push(cells[i + 99]);
-            neighbors.push(cells[i + 100]);
-            neighbors.push(cells[i + 101]);
-        }else if(cells[i].x == (width/cellWidth) && cells[i].y != (height/cellHeight)){
-            neighbors.push(cells[i - 51]);
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 1]);
-            neighbors.push(cells[i + 99]);
-            neighbors.push(cells[i + 100]);
-        }else if(cells[i].y == (height/cellHeight) && cells[i].x != (width/cellWidth)){
-            neighbors.push(cells[i - 51]);
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 49]);
-            neighbors.push(cells[i - 1]);
-            neighbors.push(cells[i + 1]);
-        }else if(cells[i].x == 0 && cells[i].y == 0){
-            neighbors.push(cells[i + 1]);
-            neighbors.push(cells[i + 100]);
-            neighbors.push(cells[i + 101]);
-        }else if(cells[i].x == (width/cellWidth) && cells[i].y == (height/cellHeight)){
-            neighbors.push(cells[i - 51]);
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 1]);
-        }else if(cells[i].x == 0 && y == (height/cellHeight)){
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 49]);
-            neighbors.push(cells[i + 1]);
-        }else if(cells[i].y == 0 && x == (width/cellWidth)){
-            neighbors.push(cells[i - 1]);
-            neighbors.push(cells[i + 99]);
-            neighbors.push(cells[i + 100]);
-        }else{
-            neighbors.push(cells[i - 51]);
-            neighbors.push(cells[i - 50]);
-            neighbors.push(cells[i - 49]);
-            neighbors.push(cells[i - 1]);
-            neighbors.push(cells[i + 1]);
-            neighbors.push(cells[i + 99]);
-            neighbors.push(cells[i + 100]);
-            neighbors.push(cells[i + 101]);
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            // if corner or edge only count cells in array range
+            if((i == 0) || (j == 0) || (i == rows - 1) || (j == cols - 1)){
+                // corners
+                if((i == 0) && (j == 0)){ // top left corner
+                    cells[i][j].neighbors += cells[i+1][j].alive;
+                    cells[i][j].neighbors += cells[i][j+1].alive;
+                    cells[i][j].neighbors += cells[i+1][j+1].alive;
+                }else if((i == rows - 1) && (j == cols - 1)){ // bottom right corner
+                    cells[i][j].neighbors += cells[i-1][j-1].alive;
+                    cells[i][j].neighbors += cells[i][j-1].alive;
+                    cells[i][j].neighbors += cells[i-1][j].alive;
+                }else if((i == 0) && (j == cols - 1)){ // bottom left corner
+                    cells[i][j].neighbors += cells[i][j-1].alive;
+                    cells[i][j].neighbors += cells[i+1][j-1].alive;
+                    cells[i][j].neighbors += cells[i+1][j].alive;
+                }else if((i == rows - 1) && (j == 0)){ // top right corner
+                    cells[i][j].neighbors += cells[i-1][j].alive;
+                    cells[i][j].neighbors += cells[i-1][j+1].alive;
+                    cells[i][j].neighbors += cells[i][j+1].alive;
+                }
+                // edges
+                else if((i == 0) && (j != 0)){ // left edge
+                    cells[i][j].neighbors += cells[i][j-1].alive;
+                    cells[i][j].neighbors += cells[i][j+1].alive;
+                    cells[i][j].neighbors += cells[i+1][j-1].alive;
+                    cells[i][j].neighbors += cells[i+1][j].alive;
+                    cells[i][j].neighbors += cells[i+1][j+1].alive;
+                }else if((i != 0) && (j == 0)){ // top edge
+                    cells[i][j].neighbors += cells[i-1][j].alive;
+                    cells[i][j].neighbors += cells[i-1][j+1].alive;
+                    cells[i][j].neighbors += cells[i][j+1].alive;
+                    cells[i][j].neighbors += cells[i+1][j].alive;
+                    cells[i][j].neighbors += cells[i+1][j+1].alive;
+                }else if((i == rows - 1) && (j != 0)){ // right edge
+                    cells[i][j].neighbors += cells[i-1][j-1].alive;
+                    cells[i][j].neighbors += cells[i-1][j].alive;
+                    cells[i][j].neighbors += cells[i-1][j+1].alive;
+                    cells[i][j].neighbors += cells[i][j-1].alive;
+                    cells[i][j].neighbors += cells[i][j+1].alive;
+                }else if((i != 0) && (j == cols - 1)){ // bottom edge
+                    cells[i][j].neighbors += cells[i-1][j-1].alive;
+                    cells[i][j].neighbors += cells[i-1][j].alive;
+                    cells[i][j].neighbors += cells[i][j-1].alive;
+                    cells[i][j].neighbors += cells[i+1][j-1].alive;
+                    cells[i][j].neighbors += cells[i+1][j].alive;
+                }
+                // center cells
+            }else{
+                cells[i][j].neighbors += cells[i-1][j-1].alive;
+                cells[i][j].neighbors += cells[i][j-1].alive;
+                cells[i][j].neighbors += cells[i+1][j-1].alive;
+                cells[i][j].neighbors += cells[i-1][j].alive;
+                cells[i][j].neighbors += cells[i+1][j].alive;
+                cells[i][j].neighbors += cells[i-1][j+1].alive;
+                cells[i][j].neighbors += cells[i][j+1].alive;
+                cells[i][j].neighbors += cells[i+1][j+1].alive;
+            }
         }
-
-        // count live neighbors
-        for(var j = 0; j < neighbors.length; j++){
-            // cells[i].neighbors += neighbors[j].alive;
-        }
-
-        // countNeighbors = 0;
-        neighbors = [];
     }
-
+    
     render();
 }
 
@@ -107,17 +107,14 @@ function render(){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // render cells
-    for(var i = 0; i < cells.length; i++){
-        if(cells[i].alive == 1){
-            ctx.fillStyle = 'rgb(255, 255, 255)';
-            ctx.fillRect(cells[i].x, cells[i].y, cellWidth, cellHeight);
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            if(cells[i][j].alive == 1){
+                ctx.fillStyle = 'rgb(255, 255, 255)';
+                ctx.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+            }
         }
     }
 }
 
 setup();
-
-// tick and render at 10 fps
-// tick every time the button is clicked if commented out 
-// setInterval(tick, 1000/10);
-
