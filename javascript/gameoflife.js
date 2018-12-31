@@ -20,7 +20,7 @@ function setup(){
         for(var j = 0; j < cols; j++){
             // random 50% alive state seed
             random = Math.floor(Math.random() * 2);
-            cells[i][j] = {x: i * cellWidth, y: j * cellHeight, alive: random, neighbors: null};
+            cells[i][j] = {alive: random, neighbors: null};
         }
     }
 
@@ -32,8 +32,7 @@ function setup(){
     tick();
 }
 
-// GOL logic here
-function tick(){
+function countNeighbors(){
     // find the neighbors of each cell
     for(var i = 0; i < rows; i++){
         for(var j = 0; j < cols; j++){
@@ -96,7 +95,53 @@ function tick(){
             }
         }
     }
-    
+}
+
+function checkRules(){
+
+    // Game Rules:
+    // 1. Any live cell with fewer than two live neighbors dies, as if by underpopulation.
+    // 2. Any live cell with two or three live neighbors lives on to the next generation.
+    // 3. Any live cell with more than three live neighbors dies, as if by overpopulation.
+    // 4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            // if the cell is alive
+            if(cells[i][j].alive == 1){
+                if(cells[i][j].neighbors < 2){ // death by underpopulation
+                    cells[i][j].alive = 0;
+                }else if((cells[i][j].neighbors == 2) || (cells[i][j].neighbors == 3)){ // lives on to next generation
+                    cells[i][j].alive = 1;
+                }else if(cells[i][j].neighbors > 3){ //death by overpopulation
+                    cells[i][j].alive = 0;
+                }
+            }else if(cells[i][j].alive == 0){ // the cell is dead
+                if(cells[i][j].neighbors == 3){ // becomes alive by reproduction
+                    cells[i][j].alive = 1;
+                }
+            }
+        }
+    }
+}
+
+function clearNeighbors(){
+    for(var i = 0; i < rows; i++){
+        for(var j = 0; j < cols; j++){
+            cells[i][j].neighbors = 0;
+        }
+    }
+}
+
+// GOL logic here
+function tick(){
+
+    countNeighbors();
+
+    checkRules();
+
+    clearNeighbors();
+
     render();
 }
 
