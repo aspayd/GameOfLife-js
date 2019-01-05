@@ -144,7 +144,6 @@ function tick(){
     clearNeighbors();
 
     render();
-
 }
 
 function render(){
