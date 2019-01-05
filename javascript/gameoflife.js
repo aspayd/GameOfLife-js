@@ -2,10 +2,10 @@ var canvas = document.querySelector("canvas");
 var ctx = canvas.getContext('2d');
 ctx.fillStyle = 'rgb(255, 255, 255)';
 
-var width = 1350;
-var height = 570;
-var cellWidth = 5;
-var cellHeight = 5;
+var width = 1000;
+var height = 550;
+var cellWidth = 10;
+var cellHeight = 10;
 
 var cols = height / cellHeight;
 var rows = width / cellWidth;
@@ -144,6 +144,7 @@ function tick(){
     clearNeighbors();
 
     render();
+
 }
 
 function render(){
@@ -156,7 +157,7 @@ function render(){
     for(var i = 0; i < rows; i++){
         for(var j = 0; j < cols; j++){
             if(cells[i][j].alive == 1){
-                ctx.fillStyle = 'rgb(' + 255 + ',' + 255 + ',' + 255 + ')';
+                ctx.fillStyle = 'rgb(' + 50 + ',' + 200 + ',' + 50 + ')';
                 ctx.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
             }
         }
