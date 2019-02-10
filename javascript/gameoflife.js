@@ -3,9 +3,9 @@ var ctx = canvas.getContext('2d');
 ctx.fillStyle = 'rgb(255, 255, 255)';
 
 var width = 1000;
-var height = 550;
-var cellWidth = 10;
-var cellHeight = 10;
+var height = 1000;
+var cellWidth = 5;
+var cellHeight = 5;
 
 var cols = height / cellHeight;
 var rows = width / cellWidth;
